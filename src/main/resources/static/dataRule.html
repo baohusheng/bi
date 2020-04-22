@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>检核规则</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/demo/demo.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="http://www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="datagrid-filter.js"></script>
+    <script src="easyui-lang-zh_CN.js"></script>
+    <style>
+        #table .datagrid-btable tr{height:35px}
+        input:focus{
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+        }
+
+    </style>
+</head>
+<body>
+<div id="dd1" class="easyui-dialog" title="新增" style="width:700px;height:400px;top:50px"
+     data-options="iconCls:'icon-save',resizable:true,modal:true,buttons:'#btn1',closed:true">
+    <form id="ff1" method="post">
+        <div style="text-align: center;">
+            <div>
+                <input class="easyui-validatebox" type="hidden" name="id" id="id1"/>
+            </div><br><br>
+            <div>
+                <label >检核系统:</label>
+                <input class="easyui-validatebox" type="text" name="pos_system" id="pos_system1" />
+            </div><br>
+            <div>
+                <label >数据类型:</label>
+                <input class="easyui-validatebox" type="text"  name="data_type" id="data_type1" />
+            </div><br>
+            <div>
+                <label >所属页面:</label>
+                <input  class="easyui-validatebox" name="module" id="module1"/>
+            </div><br>
+            <div>
+                <label >更新说明:</label>
+                <input  class="easyui-validatebox" name="updata_rule" id="updata_rule1"/>
+            </div><br>
+            <div>
+                <label >更新周期:</label>
+                <input  class="easyui-validatebox" name="update_type" id="update_type1" />
+            </div><br>
+            <div>
+                <label >更新规则:</label>
+                <input  class="easyui-validatebox" name="rule_num" id="rule_num1" />
+            </div><br>
+            <div>
+                <label >数据采集:</label>
+                <input  class="easyui-validatebox" name="data_source" id="data_source1"/>
+            </div><br>
+            <div>
+                <label >更新人员:</label>
+                <input  class="easyui-validatebox" name="auditor" id="auditor1"/>
+            </div><br>
+        </div>
+    </form>
+    <div id="btn1">
+        <a id="save1" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="saveDoc1();">保存</a>
+        <a id="quxiao1" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="javascript:$('#dd1').dialog('close')" >取消</a>
+    </div>
+</div>
+
+<div id="table">
+    <table id="dg" class="easyui-datagrid"></table>
+</div>
+<div id="dd" class="easyui-dialog" title="修改" style="width:700px;height:400px;top:50px"
+     data-options="iconCls:'icon-save',resizable:true,modal:true,buttons:'#btn',closed:true">
+    <form id="ff" method="post">
+        <div style="text-align: center;">
+            <div>
+                <input class="easyui-validatebox" type="hidden" name="id" id="id"/>
+            </div><br><br>
+            <div>
+                <label >检核系统:</label>
+                <input class="easyui-validatebox" type="text" name="pos_system" id="pos_system"  readonly unselectable="on" />
+            </div><br>
+            <div>
+                <label >数据类型:</label>
+                <input class="easyui-validatebox" type="text"  name="data_type" id="data_type" readonly unselectable="on" />
+            </div><br>
+            <div>
+                <label >所属页面:</label>
+                <input  class="easyui-validatebox" name="module" id="module" readonly unselectable="on"/>
+            </div><br>
+            <div>
+                <label >更新说明:</label>
+                <input  class="easyui-validatebox" name="updata_rule" id="updata_rule"/>
+            </div><br>
+            <div>
+                <label >更新周期:</label>
+                <input  class="easyui-validatebox" name="update_type" id="update_type" />
+            </div><br>
+            <div>
+                <label >更新规则:</label>
+                <input  class="easyui-validatebox" name="rule_num" id="rule_num" />
+            </div><br>
+            <div>
+                <label >数据采集:</label>
+                <input  class="easyui-validatebox" name="data_source" id="data_source" readonly unselectable="on"/>
+            </div><br>
+            <div>
+                <label >更新人员:</label>
+                <input  class="easyui-validatebox" name="auditor" id="auditor"/>
+            </div><br>
+        </div>
+    </form>
+</div>
+<div id="btn">
+    <a id="save" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="saveDoc();">保存</a>
+    <a id="quxiao" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="javascript:$('#dd').dialog('close')" >取消</a>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $('#dg').datagrid({
+            //singleSelect:true,
+            pagination:true,
+            pageSize:15,
+            pageList:[15,30,45,60],
+            fitColumns:true,
+            cache:false,
+            height:700,
+            url:'/getDataRule',
+            striped:true,
+            singleSelect: true,
+            toolbar: [
+                {
+                    iconCls: 'icon-add',//加号图标
+                    text:'添加',
+                    handler: function(){
+                        //弹出dialog的对话框
+                        $('#ff1').form('clear');
+                        $('#dd1').dialog('open');
+                    }
+                },{
+                    text:'<form id="search">系统：<input type="text" id="aa" name="id"/></form>',
+                },{
+                    text:'<form id="search">页面：<input type="text" id="modules" name="id"/></form>',
+                }, {
+                    iconCls: 'icon-search',
+                    text:'<a id="btn" onclick="search2();" class="easyui-linkbutton">搜索</a>'
+                },{
+
+                    iconCls: 'icon-remove',
+                    text:'<a id="btn" onclick="cform();" class="easyui-linkbutton">清空</a>'
+                },
+
+            ],
+
+            columns:[
+                [
+                    {field:'pos_system',title:'系统',width:50},
+                    {field:'data_type',title:'数据类型',width:50},
+                    {field:'module',title:'页面',width:50},
+                    {field:'updata_rule',title:'更新说明',width:50},
+                    {field:'update_type',title:'更新周期',width:50},
+                    {field:'rule_num',title:'更新规则',width:50},
+                    {field:'data_source',title:'数据采集方式',width:50},
+                    {field:'update_time',title:'更新时间',width:50,formatter: formatDatebox},
+                    {field:'auditor',title:'更新人员',width:50},
+                    {field:'修改',title:'操作',width:50,align:'center',formatter: function(value,row,index){
+                            var str='';
+                            str="<a href='javascript:;' onclick='update("+row.id+")'>修改</a>";
+                            return str;
+                        }},
+                    {field:'删除',title:'操作',width:50,align:'center',formatter: function(value,row,index){
+                            var str='';
+                            str="<a href='javascript:;' onclick='deleted("+row.id+")'>删除</a>";
+                            return str;
+                        }}
+
+                ]
+            ]
+
+        });
+        $('#modules').combobox({
+            url:'getModule',
+            valueField:'ID',
+            textField:'MODULE'
+            /*onSelect:function () {
+                $('#aa').combobox({
+                    url:'/getXt?module='+$('#moudle').combobox("getText"),
+                    valueField:'ID',
+                    textField:'POS_SYSTEM'
+                })
+            }*/
+        });
+        $('#aa').combobox({
+            url:'/getXt',
+            valueField:'ID',
+            textField:'POS_SYSTEM'
+        });
+    });
+    function formatDatebox(time) {
+        if(time==null){
+            return null;
+        }else {
+            var d = new Date(time);
+            var year = d.getFullYear();       //年
+            var month = d.getMonth() + 1;     //月
+            var day = d.getDate();            //日
+            var clock = year + "-";
+            if (month < 10)
+                clock += "0";
+            clock += month + "-";
+            if (day < 10)
+                clock += "0";
+                clock += day;
+            return (clock);
+        }
+    }
+    function update(){
+        var row = $('#dg').datagrid('getSelected');
+        $('#ff').form('clear');
+        $('#dd').dialog('open');
+        $('#id').val(row.id);
+        $('#updata_rule').val(row.updata_rule);
+        $('#update_type').val(row.update_type);
+        $('#pos_system').val(row.pos_system);
+        $('#data_type').val(row.data_type);
+        $('#module').val(row.module);
+        $('#data_source').val(row.data_source);
+        $('#rule_num').val(row.rule_num);
+        $('#auditor').val(row.auditor);
+    }
+    function saveDoc(){
+        $('#ff').form('submit',{
+            url:'/updateRule',
+            success:function () {
+                $.messager.alert('警告','修改成功');
+                $('#dd').dialog('close');
+                //刷新表格里面的数据
+                $('#dg').datagrid('reload');
+            }
+        })
+    }
+    //删除
+    function deleted(){
+        var row = $("#dg").datagrid("getSelected");
+        if (row) {
+            $.get("/deleted",{id:row.id}, $('#dg').datagrid('reload'))
+            //url = "deleted?id=" + row.ID;
+            //$('#dg').datagrid('reload');
+        }
+
+    }
+    function search2(){
+        $('#dg').datagrid('load', {
+            pos_system: $("#aa").combobox('getText'),
+            module: $("#modules").combobox('getText'),
+        });
+    }
+
+    function cform(){
+        $('#aa').combobox('clear');
+        $('#modules').combobox('clear');
+        //$('#aa').combobox('reload','getPos1');
+        $('#dg').datagrid('load', {
+        });
+    }
+    function saveDoc1(){
+        $('#ff1').form('submit',{
+            url:'/addDataRule',
+            success:function(data){
+                //alert(data) ;
+                $('#dd1').dialog('close');
+                //刷新表格里面的数据
+                $('#dg').datagrid('reload');
+            },
+            error:function(){
+
+            }
+
+        });
+    }
+</script>
+</body>
+</html>

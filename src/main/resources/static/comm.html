@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>检核系统</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/demo/demo.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="http://www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="datagrid-filter.js"></script>
+    <script src="easyui-lang-zh_CN.js"></script>
+<style>
+    #table .datagrid-btable tr{height:35px}
+    input:focus{
+        border-color: #66afe9;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+    }
+
+</style>
+</head>
+<body>
+<div id="table">
+<table id="dg" class="easyui-datagrid"></table>
+</div>
+<div id="dd" class="easyui-dialog" title="修改" style="width:700px;height:400px;top:50px"
+     data-options="iconCls:'icon-save',resizable:true,modal:true,buttons:'#btn',closed:true">
+    <form id="ff" method="post">
+        <div style="text-align: center;">
+            <div>
+
+                <input class="easyui-validatebox" type="hidden" name="id"   readonly unselectable="on"  data-options="required:true" id="id"/>
+            </div><br><br>
+            <div>
+                <label >检核系统:</label>
+                <input class="easyui-validatebox" type="text" name="pos_system" id="pos_system"   readonly unselectable="on" />
+            </div><br>
+            <div>
+                <label >数据类型:</label>
+                <input class="easyui-validatebox" type="text"  readonly unselectable="on"  name="data_type" id="data_type" />
+            </div><br>
+            <div>
+                <label >所属页面:</label>
+                <input  class="easyui-validatebox" name="module" id="module" readonly unselectable="on"
+                        data-options="valueField:'limit_id',textField:'limit_style'" />
+            </div><br>
+            <div>
+                <label >数据状态:</label>
+                <select id="state" name="state" style="width:150px;" missingMessage="必须填写" prompt="请选择" class="easyui-combobox" data-options="valueField:'state',textField:'state',required:true" >
+                    <option>正常</option>
+                    <option>异常</option>
+                    <option>未判定</option>
+                </select>
+            </div><br>
+            <div>
+                <label >异常说明:</label>
+                <input  class="easyui-validatebox" name="exceptions" id="exceptions"
+                        data-options="valueField:'exceptions',textField:'exceptions'" />
+            </div><br>
+            <div>
+                <label >更新说明:</label>
+                <input  class="easyui-validatebox" name="update_rule" id="update_rule" readonly unselectable="on"
+                        data-options="valueField:'update_rule',textField:'update_rule'" />
+            </div><br>
+
+            <div>
+                <label >检核状态:</label>
+                <select id="is_checked" name="is_checked" style="width:150px;" missingMessage="必须填写" prompt="请选择" class="easyui-combobox" data-options="valueField:'is_checked',textField:'is_checked',required:true" >
+                    <option>已检核</option>
+                    <option>未检核</option>
+                </select>
+            </div>
+            <br>
+        </div>
+    </form>
+</div>
+<div id="btn">
+    <a id="save" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="saveDoc();">保存</a>
+    <a id="quxiao" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="javascript:$('#dd').dialog('close')" >取消</a>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        $('#dg').datagrid({
+            //singleSelect:true,
+            pagination:true,
+            pageSize:15,
+            pageList:[15,30,45,60],
+            fitColumns:true,
+            cache:false,
+            height:700,
+            url:'/bidata',
+            striped:true,
+            singleSelect: true,
+            toolbar: [
+                {
+                    text:'<form id="search">开始日期：<input type="text" id="date" name="id" data-options="formatter:myformatter,parser:myparser" value="true"/>' +
+                        '结束日期<input type="text" id="date1" name="id" data-options="formatter:myformatter,parser:myparser"/></form>',
+                },
+
+                {
+                    text:'<form id="search">页面：<input type="text" id="moudle" name="id"/></form>',
+                }, {
+                    text:'<form id="search">系统：<input type="text" id="aa" name="id"/></form>',
+                }, {
+                    text:'<form id="search">更新状态：<input type="text" id="states" name="id"/></form>',
+                },{
+                    text:'<form id="search">检核状态：<input type="text" id="checked" name="id"/></form>',
+                },{
+                    iconCls: 'icon-search',
+                    text:'<a id="btn" onclick="search2();" class="easyui-linkbutton">搜索</a>'
+                },{
+
+                    iconCls: 'icon-remove',
+                    text:'<a id="btn" onclick="cform();" class="easyui-linkbutton">清空</a>'
+                },
+
+            ],
+
+            columns:[
+                [
+                {field:'pos_system',title:'系统',width:50},
+                {field:'check_date',title:'检核日期',width:50,formatter: formatDatebox},
+                {field:'data_type',title:'数据类型',width:50},
+                {field:'module',title:'页面',width:50},
+                    {field:'update_rule',title:'更新说明',width:50},
+                {field:'true_date',title:'当前应更新的日期',width:50,formatter: formatDatebox},
+                {field:'update_date',title:'当前已更新的日期',width:50,formatter: formatDatebox},
+                    {field:'state',title:'数据更新状态',width:50,styler: function(value,row,index){
+                            if (value === '异常'){
+                                return 'background-color:#ff0000;color:white;';
+                            }
+                        }},
+                {field:'exceptions',title:'异常说明',width:50},
+
+                {field:'data_source',title:'数据采集方式',width:50},
+                {field:'is_checked',title:'检核状态',width:30},
+                {field:'修改',title:'操作',width:50,align:'center',formatter: function(value,row,index){
+                            var str='';
+                        str="<a href='javascript:;' onclick='update("+row.id+")'>修改</a>";
+                            return str;
+                        }}
+            ]
+            ]
+
+        });
+
+        $('#moudle').combobox({
+            valueField:'ID',
+            textField:'MODULE',
+            url:'getState',
+            onSelect:function () {
+                $('#aa').combobox({
+                    url:'/getPos?module='+$('#moudle').combobox("getText"),
+                    valueField:'ID',
+                    textField:'POS_SYSTEM'
+                })
+            }
+        });
+        $('#aa').combobox({
+            url:'/getPos1',
+            valueField:'ID',
+            textField:'POS_SYSTEM'
+        });
+        $('#states').combobox({
+            valueField:'ID',
+            textField:'STATE',
+            url:'getSta'
+        });
+        $('#checked').combobox({
+            valueField:'ID',
+            textField:'IS_CHECKED',
+            url:'getChecked'
+        });
+        $('#date').datebox({
+
+        });
+        $('#date1').datebox({
+
+        });
+    });
+    function formatDatebox(time) {
+        if(time==null){
+            return null;
+        }else {
+        var d = new Date(time);
+        var year = d.getFullYear();       //年
+        var month = d.getMonth() + 1;     //月
+        var day = d.getDate();            //日
+        var clock = year + "-";
+        if (month < 10)
+            clock += "0";
+            clock += month + "-";
+        if (day < 10)
+            clock += "0";
+            clock += day;
+        return (clock);
+        }
+    }
+    function myformatter(date){
+        var y = date.getFullYear();
+        var m = date.getMonth()+1;
+        var d = date.getDate();
+        return y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
+    }
+    function myparser(s){
+        if (!s) return new Date();
+        var ss = (s.split('-'));
+        var y = parseInt(ss[0],10);
+        var m = parseInt(ss[1],10);
+        var d = parseInt(ss[2],10);
+        if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
+            return new Date(y,m-1,d);
+        } else {
+            return new Date();
+        }
+    }
+
+    function saveDoc(){
+       $('#ff').form('submit', {
+           url:'/updateData',
+            success:function(){
+                $.messager.alert('警告','修改成功');
+                $('#dd').dialog('close');
+                //刷新表格里面的数据
+                $('#dg').datagrid('reload');
+            }
+        });
+    }
+    function update(){
+            var row = $('#dg').datagrid('getSelected');
+            $('#ff').form('clear');
+            $('#dd').dialog('open');
+            $('#id').val(row.id);
+            $('#pos_system').val(row.pos_system);
+            $('#data_type').val(row.data_type);
+            $('#module').val(row.module);
+            $('#state').val(row.state);
+            $('#exceptions').val(row.exceptions);
+            $('#update_rule').val(row.update_rule);
+            $('#update_type').val(row.update_type);
+            $('#rule_num').val(row.rule_num);
+            $('#data_source').val(row.data_source);
+            $('#is_checked').val(row.is_checked);
+    }
+    function search2(){
+        $('#dg').datagrid('load', {
+            pos_system: $("#aa").combobox('getText'),
+            module: $("#moudle").combobox('getText'),
+            state:$("#states").combobox('getText'),
+            check_date:$("#date").datebox('getValue'),
+            end_date:$("#date1").datebox('getValue'),
+            is_checked:$("#checked").combobox('getText'),
+        });
+    }
+    function cform(){
+        $('#aa').combobox('clear');
+        $('#aa').combobox('reload','getPos1');
+        $('#moudle').combobox('clear');
+        $('#states').combobox('clear');
+        $('#date').combobox('clear');
+        $('#date1').combobox('clear');
+        $('#checked').combobox('clear');
+        $('#dg').datagrid('load', {
+    });
+    }
+</script>
+</body>
+</html>

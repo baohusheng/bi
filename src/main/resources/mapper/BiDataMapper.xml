@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.top.bi.dao.BiDataDao">
+
+    <select id="SelectBiDataList" resultType="com.top.bi.entity.BiData" parameterType="map">
+        select auditor,to_date(to_char(check_date,'yyyy-mm-dd'),'yyyy-mm-dd') check_date,pos_system,data_type,module,to_date(to_char(true_date,'yyyy-mm-dd'),'yyyy-mm-dd') true_date,to_date(to_char(update_date,'yyyy-mm-dd'),'yyyy-mm-dd') update_date,(case when true_date is null then '未判定' when update_date=true_date  then '正常' else '异常' end) as state,exceptions,update_rule,update_type,rule_num,data_source,is_checked,id from
+        (select a.*,ROWNUM RN from (
+        select * from t_data_check
+        <where>
+            <if test="bidata.pos_system!=null and bidata.pos_system!=''">
+               and pos_system like '%'|| #{bidata.pos_system} || '%'
+            </if>
+            <if test="bidata.module!=null and bidata.module!=''">
+                and module like '%'|| #{bidata.module} || '%'
+            </if>
+            <if test="bidata.state!=null and bidata.state!=''">
+                and (case when true_date is null then '未判定' when update_date=true_date  then '正常' else '异常' end)   like '%'|| #{bidata.state} || '%'
+            </if>
+            <if test="bidata.check_date!=null ">
+                and check_date <![CDATA[ >= ]]> #{bidata.check_date}
+            </if>
+            <if test="bidata.end_date!=null ">
+                and check_date <![CDATA[ <= ]]> #{bidata.end_date}
+            </if>
+            <if test="bidata.is_checked!=null and bidata.is_checked!=''">
+                and is_checked like '%'|| #{bidata.is_checked} || '%'
+            </if>
+        </where>
+        ) a
+        where rownum&lt;=#{page}*#{rows}) where rn&gt;(#{page}-1)*#{rows}
+    </select>
+    <select id="selectById" resultType="com.top.bi.entity.BiData">
+        select * from t_data_check where id=#{id}
+    </select>
+    <select id="updateData" resultType="com.top.bi.entity.BiData">
+        update t_data_check set exceptions=#{exceptions},is_checked = #{is_checked},state = #{state} where id=#{id}
+    </select>
+    <select id="getCounts" resultType="Integer">
+        select count(*) count from(select * from t_data_check)
+        <where>
+            <if test="pos_system!=null and pos_system!=''">
+                and pos_system like '%'|| #{pos_system} || '%'
+            </if>
+            <if test="module!=null and module!=''">
+                and module like '%'|| #{module} || '%'
+            </if>
+            <if test="state!=null and state!=''">
+                and (case when true_date is null then '未判定' when update_date=true_date  then '正常' else '异常' end) like '%'|| #{state} || '%'
+            </if>
+            <if test="check_date!=null ">
+                and check_date <![CDATA[ >= ]]> #{check_date}
+            </if>
+            <if test="end_date!=null ">
+                and check_date <![CDATA[ <= ]]> #{end_date}
+            </if>
+            <if test="is_checked!=null ">
+                and is_checked like '%'|| #{is_checked} || '%'
+            </if>
+        </where>
+    </select>
+</mapper>

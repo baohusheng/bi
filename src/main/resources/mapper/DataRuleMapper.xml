@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.top.bi.dao.DataRuleDao">
+<select id="SelectDataRule" resultType="com.top.bi.entity.DataRule" parameterType="map">
+    select * from
+    (select a.*,ROWNUM RN from (
+        select * from t_data_rule
+    <where>
+    <if test="dateRule.pos_system!=null and dateRule.pos_system!=''">
+        and pos_system like '%'|| #{dateRule.pos_system} || '%'
+    </if>
+        <if test="dateRule.module!=null and dateRule.module!=''">
+            and module like '%'|| #{dateRule.module} || '%'
+        </if>
+   </where>
+    ORDER BY UPDATE_TIME desc  ) a
+        where rownum&lt;=#{page}*#{rows}) where rn&gt;(#{page}-1)*#{rows}
+</select>
+<select id="getCount" resultType="Integer">
+    select count(*) from t_data_rule
+    <where>
+    <if test="pos_system!=null and pos_system!=''">
+        and pos_system like '%'|| #{pos_system} || '%'
+    </if>
+        <if test="module!=null and module!=''">
+            and module like '%'|| #{module} || '%'
+        </if>
+    </where>
+</select>
+<select id="updateRule" resultType="com.top.bi.entity.DataRule">
+    update t_data_rule set updata_rule=#{updata_rule},update_type=#{update_type},rule_num=#{rule_num},auditor=#{auditor},update_time= to_date(SYSDATE) where id=#{id}
+</select>
+    <select id="addDataRule" resultType="com.top.bi.entity.DataRule">
+    insert into t_data_rule(ID,POS_SYSTEM,DATA_TYPE,MODULE,UPDATA_RULE,UPDATE_TYPE,RULE_NUM,DATA_SOURCE,UPDATE_TIME,AUDITOR,POS_CODE) values (dataRule.nextval,#{pos_system,jdbcType=VARCHAR},#{data_type,jdbcType=VARCHAR},#{module,jdbcType=VARCHAR},#{updata_rule,jdbcType=VARCHAR},#{update_type,jdbcType=VARCHAR},#{rule_num,jdbcType=VARCHAR},#{data_source,jdbcType=VARCHAR},sysdate,#{auditor,jdbcType=VARCHAR},#{pos_code,jdbcType=VARCHAR})
+</select>
+</mapper>

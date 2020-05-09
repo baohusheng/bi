@@ -29,7 +29,9 @@
     $('#excel-file1').change(function(e) {
         var system=$("#system").val();
         var date=$("#date").val();
-        var fileName=document.getElementById('excel-file1').value;
+        var file1=document.getElementById('excel-file1');
+        var filePath = file1.value;
+        var fileName = filePath.substring(filePath.lastIndexOf('\\')+1);
         if(system.length ===0 || date.length===0){
             alert("请填写系统和日期");
         }else{

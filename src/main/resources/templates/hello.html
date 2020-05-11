@@ -9,6 +9,7 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
     <script type="text/javascript" src="http://www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="datagrid-filter.js"></script>
+    <script type="text/javascript" src="../js/hello.js"></script>
     <style type="text/css">
         #menu {
             width:80px;
@@ -47,13 +48,35 @@
             left: 1px;
         }
     </style>
+    <script>
+        window.onload=function()
+                    {
+                        // var url="localhost:8080/bi?username=00000750";
+                        var url = window.location.href;
+                        if (url.indexOf("?") != -1) {
+                            var str = url.substr(url.indexOf("?")+1);
+                            var arrTmp = str.split("&");
+                            for(var i = 0; i < arrTmp.length; i++) {
+                                var arrTemp=arrTmp[i].split("=");
+                                alert("username:"+arrTemp[1]);
+                                $("#uid").html(arrTemp[1])
+            }
+            }
+        }
+    </script>
 </head>
 <body class="easyui-layout" style="background-color:#E0ECFF">
 
 <div data-options="region:'north'"
-     style="height:120px;background-Color:#2f4050">
+     style="height:70px;background-Color:#2f4050">
     <div>
-        <a class="logo" href="/bi" title="首页"><!--脱普数据检核系统--></a>
+        <div style="color:#dfe4ed;padding-top: 15px;padding-left: 10px">
+            <a class="logo"  title="首页" style="color:#dfe4ed;">大数据中心后台系统<!--脱普数据检核系统--></a>
+        </div>
+        <div style="float:right;padding-right: 50px">
+            <span style="color:#dfe4ed;">员工工号：</span>
+            <span style="color:#dfe4ed;" id="uid"></span>
+        </div>
     </div>
 
 </div>
@@ -62,18 +85,20 @@
         <div data-options="region:'west'"
              style="width:180px;background-Color:#2f4050;font-size:30px">
             <div id="menu" class="easyui-accordion" data-options="fit:true">
-                <div title="数据检核" data-options="iconCls:'icon-reload'">
+                <div title="数据检核" data -options="iconCls:'icon-reload'">
                     <ul>
-                        <li><a href="comm.html" target="iframe">检核页面</a>
-                        <li><a href="dataRule.html" target="iframe">规则页面</a>
-                        <li><a href="postFile.html" target="iframe">导入页面</a>
+                        <li><a href="comm.html" target="iframe">数据检核</a>
+
+                        <li><a href="dataRule.html" target="iframe">检核规则</a>
+
+                        <li><a href="postFile.html" target="iframe">POS导入</a>
                     </ul>
                 </div>
             </div>
 
         </div>
         <div data-options="region:'center'" class="iframe">
-            <iframe width="100%" height="100%" name="iframe" id="iframe" src="comm.html">
+            <iframe width="100%" height="100%" name="iframe" id="iframe" src="homepage.html">
 
             </iframe>
 

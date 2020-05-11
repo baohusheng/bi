@@ -13,17 +13,17 @@ public interface DataRuleDao {
 
     void updateRule(DataRule dateRule);
     @Select("<script>" +
-            "select pos_system,max(id) id from t_data_rule group by pos_system " +
+                "select pos_system,max(id) id from t_data_rule group by pos_system " +
             "</script>")
     List<Map<String, Object>> getXt(DataRule dateRule);
 
     void addDataRule(DataRule dataRule);
     @Select("<script>" +
-            "delete from t_data_rule where id=#{id} "+
+                "delete from t_data_rule where id=#{id} "+
             "</script>")
     void deleted(DataRule dataRule);
     @Select("<script>" +
-            "select module,max(id) id from t_data_rule group by module " +
+                "select module,max(id) id from t_data_rule group by module " +
             "</script>")
     List<Map<String, Object>> getModule();
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.top.bi.dao.PostFileDao">
+
+   <select id="insert">
+       insert into pos1_file_upload(POS001,POS002,POS003,POS004,POS005,POS006,POS007,POS008,POS009,POS010,POS011,POS012,POS013,POS014,POS015,POS016,POS017,POS018,POS019,POS020,POS021,POS022,POS023,POS024,POS025,POS026,POS027,POS028,POS029,POS030,POS031,POS032,POS033,POS034,POS035,POS036,POS037,POS038,
+    POS039,POS040,POS041,POS042,POS043,POS044,POS045,POS046,POS047,POS048,POS049,POS050,POS051,POS052,POS053,POS054,POS055,POS056,POS057,POS0181,POS058,POS059,POS060,POS061,POS062,POS063,POS064,POS065,POS066,POS067,POS068,POS069,POS070,FILENAME,UPLOADER,UPLOADDATE)
+    values(#{pos001,jdbcType=VARCHAR},#{pos002,jdbcType=VARCHAR},#{pos003,jdbcType=VARCHAR},#{pos004,jdbcType=VARCHAR},#{pos005,jdbcType=VARCHAR},#{pos006,jdbcType=VARCHAR},#{pos007,jdbcType=VARCHAR},#{pos008,jdbcType=VARCHAR},#{pos009,jdbcType=VARCHAR},#{pos010,jdbcType=VARCHAR},#{pos011,jdbcType=VARCHAR},
+    #{pos012,jdbcType=VARCHAR},#{pos013,jdbcType=VARCHAR},#{pos014,jdbcType=VARCHAR},#{pos015,jdbcType=VARCHAR},#{pos016,jdbcType=VARCHAR},#{pos017,jdbcType=VARCHAR},#{pos018,jdbcType=VARCHAR},#{pos019,jdbcType=VARCHAR},#{pos020,jdbcType=VARCHAR},#{pos021,jdbcType=VARCHAR},#{pos022,jdbcType=VARCHAR},#{pos023,jdbcType=VARCHAR},
+    #{pos024,jdbcType=VARCHAR},#{pos025,jdbcType=VARCHAR},#{pos026,jdbcType=VARCHAR},#{pos027,jdbcType=VARCHAR},#{pos028,jdbcType=VARCHAR},#{pos029,jdbcType=VARCHAR},#{pos030,jdbcType=VARCHAR},#{pos031,jdbcType=VARCHAR},#{pos032,jdbcType=VARCHAR},#{pos033,jdbcType=VARCHAR},#{pos034,jdbcType=VARCHAR},#{pos035,jdbcType=VARCHAR},
+    #{pos036,jdbcType=VARCHAR},#{pos037,jdbcType=VARCHAR},#{pos038,jdbcType=DATE},#{pos039,jdbcType=VARCHAR},#{pos040,jdbcType=VARCHAR},#{pos041,jdbcType=VARCHAR},#{pos042,jdbcType=VARCHAR},#{pos043,jdbcType=VARCHAR},#{pos044,jdbcType=VARCHAR},#{pos045,jdbcType=VARCHAR},#{pos046,jdbcType=VARCHAR},#{pos047,jdbcType=VARCHAR},#{pos048,jdbcType=VARCHAR},#{pos049,jdbcType=VARCHAR},#{pos050,jdbcType=VARCHAR},#{pos051,jdbcType=VARCHAR},
+    #{pos052,jdbcType=VARCHAR},#{pos053,jdbcType=VARCHAR},#{pos054,jdbcType=VARCHAR},#{pos055,jdbcType=DATE},#{pos056,jdbcType=VARCHAR},#{pos057,jdbcType=DATE},#{pos0181,jdbcType=VARCHAR},#{pos058,jdbcType=VARCHAR},#{pos059,jdbcType=VARCHAR},#{pos060,jdbcType=DATE},#{pos061,jdbcType=VARCHAR},#{pos062,jdbcType=VARCHAR},
+    #{pos063,jdbcType=VARCHAR},#{pos064,jdbcType=VARCHAR},#{pos065,jdbcType=VARCHAR},#{pos066,jdbcType=VARCHAR},#{pos067,jdbcType=VARCHAR},#{pos068,jdbcType=VARCHAR},#{pos069,jdbcType=VARCHAR},#{pos070,jdbcType=VARCHAR},#{fileName},#{system},to_date(#{date},'yyyy-mm-dd'))
+    </select>
+    <!--<select id="insert">
+        insert into pos1_file_upload(POS001,POS003,POS022) values (#{POS001,jdbcType=VARCHAR},) ,#{POS003,jdbcType=VARCHAR},#{POS022,jdbcType=VARCHAR})
+    </select>-->
+<select id="selectSystem" resultType="com.top.bi.entity.PosUploadRule">
+    select * from T_POS_UPLOAD_RULE
+</select>
+    <select id="selectSystem1" resultType="com.top.bi.entity.PosUploadRule">
+    select * from T_POS_UPLOAD_RULE WHERE POS_CODE=#{system}
+</select>
+</mapper>

@@ -18,6 +18,7 @@
         系统：<input class="easyui-textbox" id="system" style="width:120px" data-options="prompt:'系统'"/>
         日期：<input type="text" id="date" name="id" data-options="formatter:myformatter,parser:myparser" value="true"/>
         浏览：<input type="file"  style="width:300px" id="excel-file1"  autocomplete="off" >
+        <input type="button"  style="width:50px" value="查看" class="easyui-linkbutton" onclick="stop()">
     </div>
 </div>
 <table  border="1px" id="tab">
@@ -77,7 +78,7 @@
                 method:"post",
                 contentType:"application/json",
                 dataType:"json",
-                traditional: true
+                traditional: true,
             });
             //在控制台打印出来表格中的数据
             console.log(excelFile);
@@ -107,6 +108,10 @@
     $('#date').datebox({
 
     });
+    function stop() {
+        alert("aa");
+        window.location.href="http://www.baidu.com";
+    }
 </script>
 </body>
 </html>

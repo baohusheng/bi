@@ -16,7 +16,10 @@
 <select id="selectSystem" resultType="com.top.bi.entity.PosUploadRule">
     select * from T_POS_UPLOAD_RULE
 </select>
-    <select id="selectSystem1" resultType="com.top.bi.entity.PosUploadRule">
+<select id="selectSystem1" resultType="com.top.bi.entity.PosUploadRule">
     select * from T_POS_UPLOAD_RULE WHERE POS_CODE=#{system}
+</select>
+<select id="selectval" resultType="com.top.bi.entity.PosUploadRule">
+    SELECT count(*) ROWN,sum(pos041) SPOS041,sum(pos042)SPOS042 FROM "EDI"."POS1_FILE_UPLOAD" WHERE POS003=#{pos003} and FILENAME=#{fileName} and UPLOADDATE=#{date}
 </select>
 </mapper>

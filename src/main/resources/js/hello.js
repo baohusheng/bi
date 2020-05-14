@@ -1,4 +1,5 @@
+/*
 function myFunction()
 {
     alert("HI!");
-};
+};*/

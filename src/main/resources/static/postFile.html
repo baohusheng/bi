@@ -10,22 +10,37 @@
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/demo/demo.css">
     <script type="text/javascript" src="http://www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
     <script src="../static/easyui-lang-zh_CN.js"></script>
-
 </head>
 <body>
-<div id="tbRole" style="padding:5px;height:auto">
-    <div style="margin-bottom:5px">
-        系统：<input class="easyui-textbox" id="system" style="width:120px" data-options="prompt:'系统'"/>
-        日期：<input type="text" id="date" name="id" data-options="formatter:myformatter,parser:myparser" value="true"/>
-        浏览：<input type="file"  style="width:300px" id="excel-file1"  autocomplete="off" >
-        <input type="button"  style="width:50px" value="查看" class="easyui-linkbutton" onclick="stop()">
+
+    <div id="tbRole" style="padding:5px;height:auto">
+        <div style="margin-bottom:5px">
+            系统：<input class="easyui-textbox" id="system" style="width:120px" data-options="prompt:'系统'"/>
+            日期：<input type="text" id="date" name="id" data-options="formatter:myformatter,parser:myparser" value="true"/>
+            浏览：<input type="file"  style="width:300px" id="excel-file1"  autocomplete="off" >
+            <input type="button"  style="width:50px" value="查看" class="easyui-linkbutton" onclick="stop()">
+        </div>
     </div>
-</div>
-<table  border="1px" id="tab">
-
-</table>
-
+    <table  border="1px" id="tab">
+    </table>
 <script>
+    var search = window.location.search;//获取参数；
+    var username=getSearchString('username', search);
+    function getSearchString(key, Url) {
+        var str = Url;
+        str = str.substring(1, str.length); // 获取URL中?之后的字符（去掉第一位的问号）
+        // 以&分隔字符串，获得类似name=xiaoli这样的元素数组
+        var arr = str.split("&");
+        var obj = new Object();
+        // 将每一个数组元素以=分隔并赋给obj对象
+        for (var i = 0; i < arr.length; i++) {
+            var tmp_arr = arr[i].split("=");
+            obj[decodeURIComponent(tmp_arr[0])] = decodeURIComponent(tmp_arr[1]);
+        }
+        return obj[key];
+    }
+    alert(window.location.href);
+
     //给input标签绑定change事件，一上传选中的.xls文件就会触发该函数
     $('#excel-file1').change(function(e) {
         var system=$("#system").val();
@@ -36,7 +51,7 @@
         if(system.length ===0 || date.length===0){
             alert("请填写系统和日期");
         }else{
-        alert(fileName);
+        // alert(fileName);
         var files = e.target.files;
         var fileReader = new FileReader();
         fileReader.onload = function(ev) {
@@ -59,15 +74,15 @@
                     fromTo = workbook.Sheets[sheet]['!ref'];
                     console.log(fromTo);
                     excelFile = excelFile.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
-                    var s="";
-                    for(var i=0;i<excelFile.length;i++){
+                    /*var s="";
+                     for(var i=0;i<excelFile.length;i++){
                         s="<tr>";
                         for(var key in excelFile[i]){
                             s=s+"<td>"+excelFile[i][key]+"</td>";
                         }
-                        s+="</tr>";
-                        $("#tab").append(s);
-                    }
+                         s+="</tr>";
+                         $("#tab").append(s);
+                     }*/
                     break; // 如果只取第一张表，就取消注释这行
                 }
             }
@@ -82,6 +97,7 @@
             });
             //在控制台打印出来表格中的数据
             console.log(excelFile);
+            alert("success!");
         };
         // 以二进制方式打开文件
         fileReader.readAsBinaryString(files[0]);
@@ -109,7 +125,6 @@
 
     });
     function stop() {
-        alert("aa");
         window.location.href="http://www.baidu.com";
     }
 </script>

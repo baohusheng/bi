@@ -7,7 +7,8 @@ public class REP {
     public String REPT(String str){
         if(str==null){
           return null;
-        }else {
+        }
+        else {
         Pattern r=Pattern.compile("\\s*|\t|\r|\n");
         Matcher mat=r.matcher(str);
         String f=mat.replaceAll("");

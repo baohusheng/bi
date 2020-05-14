@@ -8,7 +8,6 @@
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/demo/demo.css">
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
     <script type="text/javascript" src="http://www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="datagrid-filter.js"></script>
     <script type="text/javascript" src="../js/hello.js"></script>
     <style type="text/css">
         #menu {
@@ -18,8 +17,8 @@
         }
         #menu ul {
             list-style: none;
-            padding: 0px;
-            margin: 0px;
+            padding: 0;
+            margin: 0;
         }
         #menu ul li {
             border-bottom: 1px solid #fff;
@@ -53,7 +52,8 @@
                     {
                         // var url="localhost:8080/bi?username=00000750";
                         var url = window.location.href;
-                        if (url.indexOf("?") != -1) {
+                        alert(url);
+                        if (url.indexOf("?") !== -1) {
                             var str = url.substr(url.indexOf("?")+1);
                             var arrTmp = str.split("&");
                             for(var i = 0; i < arrTmp.length; i++) {
@@ -75,7 +75,7 @@
         </div>
         <div style="float:right;padding-right: 50px">
             <span style="color:#dfe4ed;">员工工号：</span>
-            <span style="color:#dfe4ed;" id="uid"></span>
+            <span style="color:#dfe4ed;" id="username"></span>
         </div>
     </div>
 
@@ -91,7 +91,7 @@
 
                         <li><a href="dataRule.html" target="iframe">检核规则</a>
 
-                        <li><a href="postFile.html" target="iframe">POS导入</a>
+                        <li><a href="postFile.html?username=00000750" target="iframe">POS导入</a>
                     </ul>
                 </div>
             </div>
